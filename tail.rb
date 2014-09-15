@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'debugger'
-
 def print_usage
   # Print out help for script.
   puts "#{$PROGRAM_NAME}: print the last N lines of a file. (Default: 10 lines)"
