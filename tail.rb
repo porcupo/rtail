@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'debugger'
+
 def print_usage
   # Print out help for script.
   puts "#{$PROGRAM_NAME}: print the last N lines of a file. (Default: 10 lines)"
@@ -24,41 +26,28 @@ def get_limit
   end
 end
 
-def check_limit(file_size,limit)
-  # Check to ensure limit is not more than number of lines in the input.
-  # if so, print all lines in input
-  if file_size < limit
-    return limit
-  end
-end
-
 # Read in STDIN
 input = STDIN.readlines
-require 'debugger'
+
 # Store number of input lines
 file_size = input.size
-puts 'file size'
-p file_size
-limit = get_limit
-puts 'limit'
-p limit
-debugger
-limit2 = check_limit(file_size,limit)
-puts 'limit2'
-p limit2
-exit
-# Store sanitized limit
-limit = set_limit
-limit = check_limit(file_size,limit)
 
-p file_size
-p limit
+# Store requested # of lines
+requested_limit = get_limit
+
+# Sanitize request. If the number of requested lines is greater than available
+# ones, print what we have.
+if file_size < requested_limit
+  limit = file_size
+else
+  limit = requested_limit
+end
 
 # Set starting point to total number of lines minus limit
 line_start = file_size - limit
 
 # Create a range from starting point to end of file
-line_range = line_start..input.size
+line_range = line_start..file_size
 
 # print each of those lines to STDOUT
 input[line_range].each do |line|
